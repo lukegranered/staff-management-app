@@ -4,15 +4,15 @@ DROP TABLE IF EXISTS employee;
 
 CREATE TABLE department (
     department_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULl,
-)
+    name VARCHAR(30) NOT NULl
+);
 
 CREATE TABLE role (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-    salary DECIMAL
+    title VARCHAR(30) NOT NULL,
+    salary DECIMAL(8, 2),
     department_id INTEGER
-)
+);
 
 CREATE TABLE employee (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -20,4 +20,4 @@ CREATE TABLE employee (
     last_name VARCHAR(30) NOT NULL,
     role_id INTEGER,
     manager_id INTEGER
-)
+);
