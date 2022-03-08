@@ -6,31 +6,43 @@ const init = () => {
             name: 'init',
             message: 'Select one of the following:',
             choices: ['View all Departments', 'View all Roles', 'View all Employees', 'Add a Department', 'Add a Role', 'Add an Employee', 'Update an Employee Role'],
-            validate: chosenAction => {
-                if ('View all Departments') {
-                    // View all Departments
-                }
-                if ('View all Roles') {
-                    // View all Roles
-                }
-                if ('View all Employees') {
-                    // View all Employees
-                }
-                if ('Add a Department') {
-                    addDepartment();
-                }
-                if ('Add a Role') {
-                    addRole();
-                }
-                if ('Add an Employee') {
-                    addEmployee();
-                }
-                if ('Update an Employee Role') {
-                    updateRole();
+            validate: whatDo => {
+                if ('View all Departments' || 'View all Roles' || 'View all Employees' || 'Add a Department' || 'Add a Role' || 'Add an Employee' || 'Update an Employee Role') {
+                    return true;
+                } else {
+                    return false;
                 }
             }
         }
     ])
+    .then(function ({ init }) {
+        switch (init) {
+         case 'View all Departments': 
+            // View all Departments
+        
+        case 'View all Roles':
+            // View all Roles
+        
+        case 'View all Employees':
+            // View all Employees
+        
+        case 'Add a Department':
+            addDepartment();
+            break;
+        
+        case 'Add a Role':
+            addRole();
+            break;
+        
+        case 'Add an Employee':
+            addEmployee();
+            break;
+        
+        case 'Update an Employee Role':
+            updateRole();
+            break;
+        }
+    });
 }
 
 const addDepartment = () => {
