@@ -1,4 +1,8 @@
 const inquirer = require('inquirer');
+const cTable = require('console.table');
+const mysql = require('mysql');
+
+
 const init = () => {
     return inquirer.prompt ([
         {
@@ -18,7 +22,8 @@ const init = () => {
     .then(function ({ init }) {
         switch (init) {
          case 'View all Departments': 
-            // View all Departments
+            sqlQueries.viewDepartments();
+            break;
         
         case 'View all Roles':
             // View all Roles
