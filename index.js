@@ -1,7 +1,15 @@
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const mysql = require('mysql');
-
+const mysql = require('mysql2');
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'bootcamp',
+        database: 'staff_management'
+    },
+    console.log('Connected to the staff_management database.')
+);
 
 const init = () => {
     return inquirer.prompt ([
@@ -21,15 +29,17 @@ const init = () => {
     ])
     .then(function ({ init }) {
         switch (init) {
-         case 'View all Departments': 
-            sqlQueries.viewDepartments();
+        case 'View all Departments': 
+            viewDepartment();
             break;
         
         case 'View all Roles':
-            // View all Roles
+            viewRole();
+            break;
         
         case 'View all Employees':
-            // View all Employees
+            viewEmployee();
+            break;
         
         case 'Add a Department':
             addDepartment();
@@ -50,8 +60,8 @@ const init = () => {
     });
 }
 
-const addDepartment = () => {
-    return inquirer.prompt([
+const addDepartment = async (department) => {
+    await inquirer.prompt([
         {
             type: 'input',
             name: 'newDepartment',
@@ -66,6 +76,7 @@ const addDepartment = () => {
             }
         }
     ])
+    .then(insertDepartment(department));
 }
 
 const addRole = () => {
@@ -168,6 +179,39 @@ const addEmployee = () => {
             }
         }
     ])
+}
+
+const viewDepartment = () => {
+    db.query(`SELECT * FROM department`, (err, rows) => {
+        const table = cTable.getTable(rows)
+        console.log(table);
+        init();
+    });
+
+}
+
+const viewRole = () => {
+    db.query(`SELECT * FROM role`, (err, rows) => {
+        const table = cTable.getTable(rows)
+        console.log(table);
+        init();
+    })
+}
+
+const viewEmployee = () => {
+    db.query(`SELECT * FROM employee`, (err, rows) => {
+        const table = cTable.getTable(rows)
+        console.log(table);
+        init();
+    })
+}
+
+const insertDepartment = (department) => {
+    db.query(`INSERT INTO department`, (err, rows) => {
+        const table = cTable.getTable(rows)
+        console.log(table);
+        init();
+    })
 }
 
 init();
