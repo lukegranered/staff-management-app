@@ -60,8 +60,8 @@ const init = () => {
     });
 }
 
-const addDepartment = async (department) => {
-    await inquirer.prompt([
+const addDepartment = async () => {
+    const department = await inquirer.prompt([
         {
             type: 'input',
             name: 'newDepartment',
@@ -76,14 +76,14 @@ const addDepartment = async (department) => {
             }
         }
     ])
-    .then(insertDepartment(department));
+    insertDepartment(department);
 }
 
-const addRole = () => {
-    return inquirer.prompt([
+const addRole = async (answers) => {
+    const role = await inquirer.prompt([
         {
             type: 'input',
-            name: 'newRole',
+            name: 'title',
             message: 'What is the name of the Role you would like to add?',
             validate: roleNameInput => {
                 if (roleNameInput) {
@@ -109,7 +109,7 @@ const addRole = () => {
         },
         {
             type: 'input',
-            name: 'roleDepartment',
+            name: 'department_id',
             message: 'What Department does this Role belong to?',
             validate: departmentInfo => {
                 if (departmentInfo) {
@@ -121,10 +121,11 @@ const addRole = () => {
             }
         }
     ])
+    insertRole(role);
 }
 
-const addEmployee = () => {
-    return inquirer.prompt([
+const addEmployee = async (answers) => {
+    const employee = await inquirer.prompt([
         {
             type: 'input',
             name: 'firstName',
@@ -179,6 +180,7 @@ const addEmployee = () => {
             }
         }
     ])
+    insertEmployee(employee);
 }
 
 const viewDepartment = () => {
@@ -191,7 +193,8 @@ const viewDepartment = () => {
 }
 
 const viewRole = () => {
-    db.query(`SELECT * FROM role`, (err, rows) => {
+    const sql =  `SELECT * FROM role`;
+    db.query(sql, (err, rows) => {
         const table = cTable.getTable(rows)
         console.log(table);
         init();
@@ -207,9 +210,30 @@ const viewEmployee = () => {
 }
 
 const insertDepartment = (department) => {
-    db.query(`INSERT INTO department`, (err, rows) => {
-        const table = cTable.getTable(rows)
-        console.log(table);
+    const sql = `INSERT INTO department (name) VALUES (?)`;
+    const params = [department.newDepartment];
+    db.query(sql, params, (err, rows) => {
+        console.log(`${department.newDepartment} added to the database!`);
+        init();
+    })
+    
+}
+
+const insertRole = (role) => {
+    const sql = `INSERT INTO role (title, salary) VALUES (?,?)`;
+    const params = [role.title, role.salary];
+    db.query(sql, params, (err, rows) => {
+        console.log(`${role.newRole} added to the database!`);
+        init();
+    })
+}
+
+const insertEmployee = (employee) => {
+    console.log(employee);
+    const sql = `INSERT INTO employee (first_name, last_name, role_id) VALUES (?,?,?)`;
+    const params = [employee.firstName, employee.lastName, employee.employeeRole];
+    db.query(sql, params, (err, rows) => {
+        console.log(`${employee.firstName} has been added to the database!`);
         init();
     })
 }
